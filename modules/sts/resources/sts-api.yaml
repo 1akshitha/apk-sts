@@ -1,0 +1,146 @@
+#   Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+################################################################################
+openapi: 3.0.1
+info:
+  version: v1
+  title: WSO2 APK - STS
+  description: |
+    This document specifies a **RESTful API** for WSO2 **APK** - Security Token Service .
+  contact:
+    name: WSO2
+    url: https://wso2.com/api-manager/
+    email: architecture@wso2.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://apis.wso2.com/api/am/sts/v1
+paths:
+  "/oauth2/token/":
+    post:
+      summary: |
+        Exchange a token received from IDP populating scopes.
+      description: >
+        Exchange a token received from IDP populating scopes.
+      operationId: generateToken
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/TokenRequest"  
+      responses:
+        "200":
+          description: Successfully generated a token with relevant scopes.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenResponse"  
+        "404":
+          description: |
+            Not Found.
+            Request components not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error while generating the token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+                
+components:
+  schemas:
+    TokenRequest:
+      title: Token exchange request body
+      required:
+        - client_id
+        - grant_type
+        - subject_token
+        - subject_token_type
+      type: object
+      properties:
+        client_id:
+          type: string
+        grant_type:
+          type: string
+        subject_token_type:
+          type: string
+        requested_token_type:
+          type: string
+        scope:
+          type: string
+        subject_token:
+          type: string  
+        org_handle:
+          type: string 
+    TokenResponse:
+      title: Response with token populated with scopes
+      type: object
+      properties:
+        access_token:
+          type: string
+        issued_token_type:
+          type: string
+        token_type:
+          type: string
+        expires_in:
+          type: integer
+        scope:
+          type: string
+    Error:
+      title: Error object returned with 4XX HTTP Status
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int64
+        message:
+          type: string
+          description: Error message.
+        description:
+          type: string
+          description: |
+            A detail description about the error message.
+        moreInfo:
+          type: string
+          description: |
+            Preferably an url with more details about the error.
+        error:
+          type: array
+          description: |
+            If there are more than one error list them out.
+            For example, list out validation errors by each field.
+          items:
+            $ref: "#/components/schemas/ErrorListItem"
+    ErrorListItem:
+      title: Description of individual errors that may have occurred during a request.
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          description: |
+            Description about individual errors occurred
+        description:
+          type: string
+          description: |
+            A detail description about the error message.

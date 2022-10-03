@@ -1,0 +1,4 @@
+[container.image]
+repository="lakshithag" # Docker hub repository name.
+name="apk-sts" # container name
+tag="latest"
