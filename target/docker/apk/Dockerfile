@@ -70,8 +70,8 @@ COPY testng-7.4.0.jar /home/ballerina/jars/
 COPY time-native-2.2.2.jar /home/ballerina/jars/ 
 COPY url-native-2.2.2.jar /home/ballerina/jars/ 
 COPY wso2-apk.sts-0.1.0.jar /home/ballerina/jars/ 
+COPY wso2-apk-6159771700682219085-observability-symbols.jar /home/ballerina/jars/ 
 COPY wso2-apk-0.1.0.jar /home/ballerina/jars/ 
-COPY wso2-apk-13030738150038547714-observability-symbols.jar /home/ballerina/jars/ 
 RUN addgroup troupe \
     && adduser -S -s /bin/bash -g 'ballerina' -G troupe -D ballerina \
     && apk add --update --no-cache bash \
@@ -80,7 +80,7 @@ RUN addgroup troupe \
 WORKDIR /home/ballerina
 COPY wso2-apk-0.1.0.jar /home/ballerina
 
-EXPOSE  8080 9446
+EXPOSE  8080 9443
 USER ballerina
 
 CMD java -Xdiag -cp "wso2-apk-0.1.0.jar:jars/*" 'wso2/apk/0/$_init'

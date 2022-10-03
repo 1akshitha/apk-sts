@@ -12,9 +12,9 @@ spec:
     protocol: "TCP"
     targetPort: 8080
   - name: "port-2-apk-svc"
-    port: 9446
+    port: 9443
     protocol: "TCP"
-    targetPort: 9446
+    targetPort: 9443
   selector:
     app: "apk"
   type: "ClusterIP"
@@ -48,7 +48,7 @@ spec:
         - containerPort: 8080
           name: "port-1-apk-svc"
           protocol: "TCP"
-        - containerPort: 9446
+        - containerPort: 9443
           name: "port-2-apk-svc"
           protocol: "TCP"
         resources:
